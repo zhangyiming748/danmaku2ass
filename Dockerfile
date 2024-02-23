@@ -6,7 +6,7 @@ RUN cp /etc/apk/repositories /etc/apk/repositories.bak
 # 修改为国内源
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories
 # 安装基础软件
-RUN apk add ffmpeg zsh vim nano less git wget curl ca-certificates ttf-dejavu fontconfig iproute2 dialog make cmake alpine-sdk gcc nasm yasm aom-dev libvpx-dev libwebp-dev x264-dev x265-dev dav1d-dev xvidcore-dev fdk-aac-dev go python3 py3-pip gettext htop openssh-server
+RUN apk add ffmpeg zsh vim nano less git wget curl ca-certificates ttf-dejavu fontconfig iproute2 dialog make cmake alpine-sdk gcc nasm yasm aom-dev libvpx-dev libwebp-dev x264-dev x265-dev dav1d-dev xvidcore-dev fdk-aac-dev go python3 py3-pip gettext htop openssh-server alpine-conf
 # 开启ssh
 WORKDIR /etc/ssh
 RUN ssh-keygen -A
