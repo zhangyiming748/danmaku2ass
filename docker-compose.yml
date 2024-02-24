@@ -8,3 +8,5 @@ services:
     ports:
       - "8022:22"
     container_name: test
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
