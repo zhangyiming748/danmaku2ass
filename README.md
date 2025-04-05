@@ -1,138 +1,138 @@
-Danmaku2ASS
-===========
+# danmaku2ass
 
-What is it?
------------
+[English](#english) | [中文](#chinese)
 
-Danmaku2ASS converts comments from Niconico/Acfun/Bilibili to ASS format so that you can play it with any media player supporting ASS subtitle.
+## English
 
-This software is free software released under GPL 3 license. There is no warranty to the extent permitted by law.
+danmaku2ass is a command-line tool written in Go that converts danmaku (comment) files from various streaming platforms into ASS subtitle format. It supports popular platforms including Bilibili, Niconico, and AcFun.
 
-How to use it?
---------------
+### Features
 
-First, you will have to get the XML or JSON file from Niconico/Acfun/Bilibili, many software can help you get it. For example, [you-get](https://github.com/soimort/you-get) and [nicovideo-dl](http://sourceforge.jp/projects/nicovideo-dl/).
+- Convert danmaku files to ASS subtitle format
+- Support multiple streaming platforms:
+  - Bilibili
+  - Niconico
+  - AcFun
+- Automatic format detection
+- Customizable font settings and display parameters
+- Batch processing of multiple input files
 
-Then, execute `danmaku2ass`. You can see further instructions below.
+### Installation
 
-Installing
-----------
+```bash
+# Using go install
+go install github.com/m13253/danmaku2ass@latest
 
-You may install `danmaku2ass` with the Makefile provided.
-
-```sh
-make
-make install
+# Or clone and build from source
+git clone https://github.com/m13253/danmaku2ass.git
+cd danmaku2ass
+go build
 ```
 
-`PREFIX=` is accepted by `make install` for specifying installation prefix.
+### Usage
 
-A PKGBUILD is also provided.
-
-Example usage
--------------
-
-```sh
-./danmaku2ass -o foo.ass -s 1920x1080 -fn "MS PGothic" -fs 48 -a 0.8 -dm 5 -ds 5 foo.xml
+Basic usage:
+```bash
+danmaku2ass -s 1920x1080 input.xml
 ```
 
-Name the output file with same basename but different extension (.ass) as the video. Put them into the same directory and most media players will automatically load them. For MPlayer, you will have to specify `-ass` option.
+With all available options:
+```bash
+danmaku2ass [options] input_file [input_file...]
 
-Make sure that the width/height ratio passed to `danmaku2ass` matches the one of your original video, or text deformation may be experienced.
-
-You can also pass multiple XML/JSON files and they will be merged into one ASS file. This is useful when watching danmakus from different website at the same time.
-
-Screenshot
-----------
-
-![5 Centimeters Per Second with Danmaku2ASS](screenshot.jpg)
-
-Video: _5 Centimeters Per Second_
-
-Source: http://www.bilibili.tv/video/av135209/
-
-Players for a specific site
----------------------------
-
-If you prefer to watch videos on a specific site listed below with a media player, you can check these projects, which usually provide online streaming features:
-
-- Bilibili: [BiliDan](https://github.com/m13253/BiliDan), (MPV Player, FFmpeg, Linux, OS X, (unstable on) Windows), officially supported by Danmaku2ASS contributer
-- Bilibili: [BiliGui](https://github.com/marguerite/BiliGui), (MPV Player, Ruby, Qt4, FFmpeg, Linux)
-- Bilibili: [Biligrab](https://github.com/cnbeining/Biligrab), (Aria2, Python2, FFmpeg, OS X, (unstable on) Linux)
-- Bilibili: [MoonPlayer](https://github.com/coslyk/moonplayer), (MPlayer, Qt4, Linux, Windows)
-- Tudou Doupao, Acfun, Bilibili: [Yatto](https://github.com/Goshin/Yatto), (MPV Player, FFmpeg, Linux)
-
-Please [submit your work](https://github.com/m13253/danmaku2ass/issues) if you have made a better one!
-
-Command line reference
-----------------------
-
-```
-usage: danmaku2ass.py [-h] [-f FORMAT] [-o OUTPUT] -s WIDTHxHEIGHT [-fn FONT]
-                      [-fs SIZE] [-a ALPHA] [-dm SECONDS] [-ds SECONDS]
-                      [-fl FILTER] [-p HEIGHT] [-r]
-                      FILE [FILE ...]
-
-positional arguments:
-  FILE                  Comment file to be processed
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -f FORMAT, --format FORMAT
-                        Format of input file (autodetect|Bilibili|Tudou2|MioMi
-                        o|Acfun|Niconico|Tudou) [default: autodetect]
-  -o OUTPUT, --output OUTPUT
-                        Output file
-  -s WIDTHxHEIGHT, --size WIDTHxHEIGHT
-                        Stage size in pixels
-  -fn FONT, --font FONT
-                        Specify font face [default: sans-serif]
-  -fs SIZE, --fontsize SIZE
-                        Default font size [default: 25]
-  -a ALPHA, --alpha ALPHA
-                        Text opacity
-  -dm SECONDS, --duration-marquee SECONDS
-                        Duration of scrolling comment display [default: 5]
-  -ds SECONDS, --duration-still SECONDS
-                        Duration of still comment display [default: 5]
-  -fl FILTER, --filter FILTER
-                        Regular expression to filter comments
-  -flf FILTER_FILE, --filter-file FILTER_FILE
-                        Regular expressions from file (one line one regex) to filter comments
-  -p HEIGHT, --protect HEIGHT
-                        Reserve blank on the bottom of the stage
-  -r, --reduce          Reduce the amount of comments if stage is full
+Options:
+  -o string
+        Output file path (default: input_name.ass)
+  -s string
+        Screen size in the format WIDTHxHEIGHT (default: "320x240")
+  -fn string
+        Font name (default: "MS PGothic")
+  -fs float
+        Font size (default: 48)
+  -a float
+        Alpha value (default: 0.8)
+  -dm float
+        Duration margin (default: 5)
+  -ds float
+        Duration start (default: 5)
 ```
 
-FAQ
----
+### Example
 
-### The text is moving laggy. / The text is slightly blurred.
-
-Most ASS renderers render ASS subtitles at the same resolution as the video. This is probably because the video is at low resolution or framerate.
-
-If you use MPlayer, you can add options similar to `-vf scale=1920:1080` (change the values as you wish).`
-
-### I would like to render the danmakus into the video.
-
-Use `ffmpeg`:
-
-```sh
-ffmpeg -i foo.flv -vf ass=foo.ass -vcodec libx264 -acodec copy foo-with-danmaku.flv
+Convert a Bilibili XML file to ASS format with custom settings:
+```bash
+danmaku2ass -s 1920x1080 -fn "Microsoft YaHei" -fs 36 -a 0.7 input.xml
 ```
 
-Change the parameters as you like.
+![Screenshot](screenshot.jpg)
 
-### Danmaku2ASS gave me some warnings of 'Invalid comment'.
+## Chinese
 
-This is probably because of comment styles that are not recognized by Danmaku2ASS. This is mostly normal. However, if you think that Danmaku2ASS missed some important things, please feel free to submit an issue.
+danmaku2ass 是一个用 Go 语言编写的命令行工具，可以将各大视频平台的弹幕文件转换为 ASS 字幕格式。支持包括哔哩哔哩、Niconico、AcFun 等平台。
 
-### Is there a GUI?
+### 功能特点
 
-Currently no. But there will soon be one made of Gtk+ 3. If you would like to help me, please contact with me.
+- 将弹幕文件转换为 ASS 字幕格式
+- 支持多个视频平台：
+  - 哔哩哔哩（Bilibili）
+  - Niconico
+  - AcFun
+- 自动检测弹幕格式
+- 可自定义字体设置和显示参数
+- 支持批量处理多个输入文件
 
-Contributing
-------------
+### 安装方法
 
-Any contribution is welcome. Any donation is welcome as well.
+```bash
+# 使用 go install 安装
+go install github.com/m13253/danmaku2ass@latest
+
+# 或者克隆源码编译
+git clone https://github.com/m13253/danmaku2ass.git
+cd danmaku2ass
+go build
+```
+
+### 使用方法
+
+基本用法：
+```bash
+danmaku2ass -s 1920x1080 input.xml
+```
+
+所有可用选项：
+```bash
+danmaku2ass [选项] 输入文件 [输入文件...]
+
+选项说明：
+  -o string
+        输出文件路径（默认：输入文件名.ass）
+  -s string
+        屏幕尺寸，格式为 宽x高（默认："320x240"）
+  -fn string
+        字体名称（默认："MS PGothic"）
+  -fs float
+        字体大小（默认：48）
+  -a float
+        透明度（默认：0.8）
+  -dm float
+        弹幕持续时间边界值（默认：5）
+  -ds float
+        弹幕开始时间偏移（默认：5）
+```
+
+### 使用示例
+
+将哔哩哔哩的 XML 弹幕文件转换为 ASS 格式，并自定义设置：
+```bash
+danmaku2ass -s 1920x1080 -fn "Microsoft YaHei" -fs 36 -a 0.7 input.xml
+```
+
+### 许可证
+
+本项目基于 GPL-3.0 许可证开源。
+
+### 贡献
+
+欢迎提交 Issue 和 Pull Request！如果你制作了更好的转换效果，请通过 [Issue](https://github.com/m13253/danmaku2ass/issues) 提交你的作品。
 
